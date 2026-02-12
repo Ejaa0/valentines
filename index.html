@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Pacar Ejaa ✨</title>
+
+<style>
+body{
+    margin:0;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#ffd6e0,#ff4d6d);
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+    position:relative;
+}
+
+/* ❤️ Background hearts */
+#bg-hearts{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+}
+
+.bg-heart{
+    position:absolute;
+    color:white;
+    opacity:0.15;
+    animation:moveBg linear infinite;
+}
+
+@keyframes moveBg{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);}
+}
+
+/* ❤️ Burst hearts */
+.heart{
+    position:absolute;
+    color:#ff2e63;
+    animation:floatHeart 3s linear forwards;
+    pointer-events:none;
+    z-index:20;
+}
+
+@keyframes floatHeart{
+    0%{transform:translateY(0) scale(1);opacity:1;}
+    100%{transform:translateY(-250px) scale(1.6);opacity:0;}
+}
+
+/* 📦 Container */
+.container{
+    width:90%;
+    max-width:420px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+    z-index:10;
+    position:relative;
+}
+
+/* 💌 Envelope */
+.envelope{
+    position:relative;
+    width:280px;
+    height:190px;
+    background:linear-gradient(145deg,#ff4d6d,#c9184a);
+    border-radius:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:all 0.8s ease;
+    overflow:hidden;
+}
+
+.envelope:hover{
+    transform:scale(1.05);
+}
+
+.flap{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:linear-gradient(145deg,#ff758f,#ff4d6d);
+    clip-path:polygon(0 0,50% 65%,100% 0);
+    transform-origin:top;
+    transition:transform 0.8s ease;
+}
+
+.open .flap{
+    transform:rotateX(180deg);
+}
+
+.hide-envelope{
+    opacity:0;
+    transform:scale(0.7);
+    pointer-events:none;
+}
+
+/* 📜 Letter */
+.letter{
+    width:100%;
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-sizing:border-box;
+    opacity:0;
+    transform:translateY(-60px) scale(0.9);
+    transition:all 0.9s cubic-bezier(.22,1,.36,1);
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+}
+
+.show-letter{
+    opacity:1;
+    transform:translateY(-120px) scale(1);
+}
+
+.letter h2{
+    text-align:center;
+    color:#c9184a;
+    margin-top:0;
+}
+
+.letter p{
+    color:#555;
+    line-height:26px;
+    font-size:14px;
+    margin:0;
+}
+
+/* 📸 Falling Photos */
+.falling-photo{
+    position:fixed;
+    top:-150px;
+    width:120px;
+    background:white;
+    padding:8px 8px 20px 8px;
+    border-radius:8px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.3);
+    animation:fall linear forwards;
+    z-index:2;
+}
+
+.falling-photo img{
+    width:100%;
+    height:130px;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+@keyframes fall{
+    0%{
+        transform:translateY(0) rotate(var(--rotate));
+        opacity:1;
+    }
+    85%{
+        opacity:1;
+    }
+    100%{
+        transform:translateY(130vh) rotate(var(--rotate));
+        opacity:0;
+    }
+}
+
+/* Hint */
+.hint{
+    position:absolute;
+    bottom:-40px;
+    color:white;
+    font-size:14px;
+    animation:blink 1.5s infinite;
+}
+
+@keyframes blink{
+    0%,100%{opacity:1;}
+    50%{opacity:0.5;}
+}
+</style>
+</head>
+
+<body>
+
+<div id="bg-hearts"></div>
+
+<div class="container">
+    
+    <div class="envelope" id="envelope" onclick="openLetter()">
+        <div class="flap"></div>
+    </div>
+
+    <div class="letter" id="letter">
+        <h2>Untuk Siti ✨</h2>
+        <p id="typedText"></p>
+    </div>
+
+    <div class="hint">Klik amplopnya yaa 💌</div>
+
+</div>
+
+<script>
+let opened=false;
+
+const message = `
+Happy Valentine's Day Sayang ❤️
+
+Terima kasih sayangku yang cantik.
+Kamu selalu menemani aku dari tingkat 1 sampai sekarang.
+Aku bersyukur banget punya pasangan seperti kamu.
+Kamu selalu mewarnai hidup aku.
+
+Semangat sidangnya ya cantik,
+aku tahu kamu pasti bisa.
+I love you always 🤍
+`;
+
+const photos=["foto1.jpeg","foto2.jpeg","foto3.jpeg","foto4.jpeg"];
+
+function openLetter(){
+    if(!opened){
+        const envelope=document.getElementById("envelope");
+        const letter=document.getElementById("letter");
+
+        envelope.classList.add("open");
+
+        setTimeout(()=>{
+            envelope.classList.add("hide-envelope");
+            letter.classList.add("show-letter");
+            createHearts();
+            typeWriter();
+            startSprinkle();
+        },800);
+
+        opened=true;
+    }
+}
+
+/* Background hearts */
+function createBgHearts(){
+    const container=document.getElementById("bg-hearts");
+
+    for(let i=0;i<40;i++){
+        const heart=document.createElement("div");
+        heart.classList.add("bg-heart");
+        heart.innerHTML="❤";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.top=Math.random()*100+"vh";
+        heart.style.fontSize=(Math.random()*40+20)+"px";
+        heart.style.animationDuration=(Math.random()*25+15)+"s";
+        container.appendChild(heart);
+    }
+}
+createBgHearts();
+
+/* Burst hearts */
+function createHearts(){
+    for(let i=0;i<25;i++){
+        const heart=document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML="❤️";
+        heart.style.left=(window.innerWidth/2+(Math.random()*200-100))+"px";
+        heart.style.top=(window.innerHeight/2)+"px";
+        heart.style.fontSize=(Math.random()*20+15)+"px";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),3000);
+    }
+}
+
+/* Typewriter */
+function typeWriter(){
+    let i=0;
+    const speed=35;
+    const textElement=document.getElementById("typedText");
+
+    function typing(){
+        if(i<message.length){
+            textElement.innerHTML += 
+                message.charAt(i)==="\n"?"<br>":message.charAt(i);
+            i++;
+            setTimeout(typing,speed);
+        }
+    }
+    typing();
+}
+
+/* Sprinkle Effect */
+function startSprinkle(){
+    setInterval(()=>{
+        createFallingPhoto();
+    },700);
+}
+
+function createFallingPhoto(){
+    const photo=document.createElement("div");
+    photo.classList.add("falling-photo");
+
+    const img=document.createElement("img");
+    img.src=photos[Math.floor(Math.random()*photos.length)];
+
+    photo.appendChild(img);
+
+    photo.style.left=Math.random()*100+"vw";
+
+    const duration=Math.random()*3+4;
+    photo.style.animationDuration=duration+"s";
+    photo.style.setProperty("--rotate",(Math.random()*40-20)+"deg");
+
+    document.body.appendChild(photo);
+
+    setTimeout(()=>{
+        photo.remove();
+    },duration*1000);
+}
+</script>
+
+</body>
+</html>
